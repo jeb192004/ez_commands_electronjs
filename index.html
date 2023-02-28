@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
+    <meta http-equiv="X-Content-Security-Policy"
+        content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'" />
+
+    <!--XEL STUFF-->
+    <script src="./node_modules/xel/xel.js" type="module"></script>
+    <meta name="xel-theme" content="./node_modules/xel/themes/adwaita-dark.css">
+    <meta name="xel-accent-color" content="blue">
+    <meta name="xel-size" content="large">
+    <meta name="xel-iconsets" content="./node_modules/xel/iconsets/material.svg">
+    <title>Hello from Electron renderer!</title>
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <x-menubar style="background-color: #242424; position: fixed; top:0; left:0; z-index: 100;">
+        <x-menuitem>
+            <x-label>File</x-label>
+            <x-menu>
+                <x-menuitem>
+                    <x-icon href="#add"></x-icon>
+                    <x-label>New Template</x-label>
+
+                </x-menuitem>
+            </x-menu>
+        </x-menuitem>
+        <x-menubar style="-webkit-app-region: drag; width: calc(100% - 5em);"></x-menubar>
+        <x-menuitem style="position:fixed; right:2px; height: auto;" onclick="close_app()">
+            <x-label>X</x-label>
+        </x-menuitem>
+    </x-menubar>
+    <hr style="position: fixed; top: 40px;">
+    <x-box style="margin: 50px 10px 10px 10px;" vertical>
+        <x-message>EZ Commnads</x-message>
+        <x-message>Add your own commands using the button below!</x-message>
+        <x-message style="margin-bottom: 10px;">When adding Git commands, you only need to add 1 (clone, push, or pull)
+            and this will create all 3 for you. There is no need to create a command for each one.</x-message>
+        <x-input style="margin-bottom: 10px;" id="command_title">
+            <x-icon href="#edit"></x-icon>
+            <x-label>Title</x-label>
+        </x-input>
+        <x-texteditor style="margin-bottom: 10px; margin-top: 0;" id="command">
+            <x-icon href="#code" style="margin-left: 5px;"></x-icon>
+            <x-label style="margin-left: 25px;">Command</x-label>
+        </x-texteditor>
+        <x-button style="margin-bottom: 10px;" id="add_command" onclick="add_command(this)">
+            <x-icon href="#add"></x-icon>
+            <x-label>Submit</x-label>
+        </x-button>
+        <hr>
+        <ul id="command_list" style="list-style: none; width: 100%;"></ul>
+    </x-box>
+
+    
+</body>
+<script src="./renderer.js"></script>
+
+</html>
