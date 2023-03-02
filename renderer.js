@@ -1,5 +1,32 @@
 var jsonCommands = []
 
+async function remove_command(el) {
+    if (el.id.split('_')[2] === 'yes') {
+        var id = el.id.split('_')[3];
+        var tempJson = []
+        jsonCommands.forEach(async (item, index) => {
+            if (item.id != id) {
+                tempJson.push(item)
+            }
+            if (index + 1 === jsonCommands.length) {
+                jsonCommands = tempJson;
+                var dialog_id = `confirm_remove_${el.id.split('_')[3]}`
+                var dialog = document.querySelector('#'+dialog_id);
+                dialog.close()
+                await versions.remove_command(jsonCommands)
+                var elem = document.getElementById(`${id}`);
+                elem.parentNode.removeChild(elem);
+            }
+        })
+    }
+}
+
+function close_remove_dialog(el){
+    var id = `confirm_remove_${el.id.split('_')[3]}`
+    var dialog = document.querySelector('#'+id);
+    dialog.close()
+}
+
 async function add_command() {
     var command_title = document.getElementById('command_title').value;
     var command = document.getElementById('command').value;
@@ -64,8 +91,23 @@ function build_li_item(item) {
         buttons += `<x-button id='pull_${item.id}' onclick="copy(this)" style="margin-right:10px;"><x-icon href="#copy"></x-icon><x-label>Pull</x-Label></x-button>`
 
     } else { buttons = `<x-button id="copy_${item.id}" onclick="copy(this)"><x-icon href="#copy"></x-icon><x-label>Copy</x-Label></x-button>` }
+    buttons += `<x-button style="position: absolute; right:20px" id='remove_${item.id}' style="margin-right:10px;"><x-icon href="#remove"></x-icon><x-label>Remove</x-Label>
+    <dialog id="confirm_remove_${item.id}">
+            <main>
+                <p>Are you sure you want to remove this command?  This cannot be undone.</p>
+            </main>
+            <footer>
+                    <x-button id="confirm_remove_yes_${item.id}" onclick="remove_command(this)">
+                        <x-label>Yes</x-label>
+                    </x-button>
+                    <x-button autofocus toggled style="background-color:red;" id="confirm_remove_no_${item.id}" onclick="close_remove_dialog(this)">
+                        <x-label>No</x-label>
+                    </x-button>
+            </footer>
+        </dialog></x-button>`
+
     document.getElementById('command_list').innerHTML += `
-    <li id="${item.id}" style="width:calc(100% - 40px); margin-bottom:10px;"><x-card><main><x-box>
+    <li id="${item.id}" style="width:calc(100% - 40px); margin-bottom:10px;" position:relative;><x-card><main><x-box>
         <x-label style="font-size:1.2em; font-weight:bold;">${item.name}<x-label>
         <x-box style="margin-top:10px" horizontal>
             ${buttons}
